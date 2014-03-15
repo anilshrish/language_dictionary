@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Demonstrates adding a new node type and formatter.
- */
 
 /**
  *@ Language dictionary module 
