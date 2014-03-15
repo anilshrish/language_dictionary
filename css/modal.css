@@ -1,0 +1,134 @@
+/* ctools modal form */
+
+
+div.ctools-modal-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 0 2px 0 #CCCCCC;
+    color: #000000;
+    margin: 2px;
+    padding: 0;
+    text-align: left;
+    width: 600px;
+}
+div.ctools-modal-content .modal-title {
+    color: #FFFFFF;
+    font-size: 120%;
+    font-weight: normal;
+    overflow: hidden;
+    white-space: nowrap;
+}
+div.ctools-modal-content .modal-header {
+    background-color: #666666;
+    border-radius: 5px 5px 0 0;
+    padding: 0 0.25em 0 1em;
+}
+div.ctools-modal-content .modal-header a {
+    color: #FFFFFF;
+}
+div.ctools-modal-content .modal-content {
+    overflow: auto;
+    padding: 1em 1em 0;
+    position: relative;
+}
+div.ctools-modal-content .modal-form {
+}
+div.ctools-modal-content a.close {
+    color: #FFFFFF;
+    float: right;
+}
+div.ctools-modal-content a.close:hover {
+    text-decoration: none;
+}
+div.ctools-modal-content a.close img {
+    display: none;
+    position: relative;
+    top: 1px;
+}
+div.ctools-modal-content .modal-content .modal-throbber-wrapper {
+    text-align: center;
+}
+div.ctools-modal-content .modal-content .modal-throbber-wrapper img {
+    margin-top: 160px;
+}
+div.ctools-modal-content .form-item label {
+    float: left;
+    font-weight: normal;
+    width: 15em;
+}
+div.ctools-modal-content .form-item label.option {
+    float: none;
+    width: auto;
+}
+div.ctools-modal-content .form-item .description {
+    clear: left;
+    margin-left:17.6em;
+}
+div.ctools-modal-content .form-item .description .tips {
+    margin-left: 2em;
+}
+div.ctools-modal-content .no-float .form-item * {
+    float: none;
+}
+div.ctools-modal-content .modal-form .no-float label {
+    width: auto;
+}
+div.ctools-modal-content fieldset, div.ctools-modal-content .form-radios, div.ctools-modal-content .form-checkboxes {
+    clear: left;
+}
+div.ctools-modal-content .resizable-textarea {
+    margin-left: 15em;
+    margin-right: 5em;
+    width: auto;
+}
+div.ctools-modal-content .container-inline .form-item {
+    margin-right: 2em;
+}
+#views-exposed-pane-wrapper .form-item {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+div.ctools-modal-content label.hidden-options {
+    background: url("../images/arrow-active.png") no-repeat scroll right center rgba(0, 0, 0, 0);
+    height: 12px;
+    padding-right: 12px;
+}
+div.ctools-modal-content label.expanded-options {
+    background: url("../images/expanded-options.png") no-repeat scroll right center rgba(0, 0, 0, 0);
+    height: 12px;
+    padding-right: 16px;
+}
+div.ctools-modal-content .option-text-aligner label.expanded-options, div.ctools-modal-content .option-text-aligner label.hidden-options {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+div.ctools-modal-content .dependent-options {
+    padding-left: 30px;
+}
+
+
+.ctools-use-modal-processed .form-textarea-wrapper textarea, .ctools-use-modal-processed .resizable-textarea .grippie {
+  width:69%;
+}
+
+
+.ctools-use-modal-processed .form-text {
+    border: 1px solid #999999;
+    border-radius: 2px;
+    width: 300px;
+}
+
+.ctools-use-modal-processed .form-submit {
+    background: none repeat scroll 0 0 #999999;
+    border-radius: 3px;
+    color: #FFFFFF;
+    font-size: 15px;
+    margin-left: 200px;
+    text-shadow: none;
+    text-transform: uppercase;
+    width: 50%;
+}
+
+.ctools-use-modal-processed .form-submit:hover {
+  background:#333;
+}
