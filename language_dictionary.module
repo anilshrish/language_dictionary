@@ -1,0 +1,149 @@
+<?php
+/**
+ * @file
+ * Demonstrates adding a new node type and formatter.
+ */
+
+/**
+ *@ Language dictionary module 
+ */
+
+/**
+ * Implements hook_menu
+ */
+
+
+function language_dictionary_menu() {
+
+$items['ld/suggestion'] = array(
+        'title' => 'Please add your suggestions for the word',
+        'description' => 'Adding suggestions will help us improving dictionary',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('language_dictionary_suggestion_form'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access content'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.action.inc',
+        'modal' => TRUE,
+);
+
+
+$items['ld/modify'] = array(
+        'title' => 'Please edit and submit',
+        'description' => 'Edit word for making words more insighful',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('language_dictionary_modify_form'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access content'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.action.inc',
+        'modal' => TRUE,
+);
+
+$items['ld/addword'] = array(
+        'title' => 'Please add new word',
+        'description' => 'Add new words and submit',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('language_dictionary_add_form'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access content'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.action.inc',
+        'modal' => TRUE,
+);
+
+$items['admin/structure/ld/suggestion'] = array(
+
+        'title' => 'Suggestion Word Queue',
+        'description' => 'Add new words and submit',
+        'page callback' => 'language_dictionary_suggestion_queue',
+        #'page arguments' => array('language_dictionary_suggestion_queue',4),
+        'access callback' => 'user_access',
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.admin.inc',
+);
+
+$items['admin/structure/ld/modify'] = array(
+
+        'title' => 'Edit Word Queue',
+        'description' => 'Add new words and submit',
+        'page callback' => 'language_dictionary_modify_queue',
+        #'page callback' => 'drupal_get_form',
+        #'page arguments' => array('language_dictionary_modify_queue'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.admin.inc',
+);
+
+
+$items['admin/structure/ld/addword'] = array(
+
+        'title' => 'New Word Queue',
+        'description' => 'Add new words and submit',
+        'page callback' => 'language_dictionary_add_queue',
+        #'page callback' => 'drupal_get_form',
+        #'page arguments' => array('language_dictionary_add_queue'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'language_dictionary.admin.inc',
+);
+
+
+return $items;
+
+}
+
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function language_dictionary_field_formatter_info() {
+  return array(
+    'language_dictionary_example_field' => array(
+      'label' => t('Example Field Formatter'),
+      'field types' => array('text'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function language_dictionary_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
+  switch ($display['type']) {
+    case 'language_dictionary_example_field':
+      $element[0]['#type'] = 'markup';
+      $element[0]['#markup'] = theme('language_dictionary_example_field', array('value' => $items[0]['safe_value']));
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Theme the example field.
+ */
+function theme_language_dictionary_example_field($variables) {
+  return '<blockquote>' . $variables['value'] . '</blockquote>';
+}
+
+/**
+ * Implements hook_theme().
+ */
+function language_dictionary_theme() {
+  return array(
+    'language_dictionary_example_field' => array(
+      'variables' => array('value' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function language_dictionary_views_api() {
+  return array('api' => 3.0);
+}

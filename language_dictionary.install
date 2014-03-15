@@ -1,0 +1,281 @@
+<?php
+/**
+ * @file
+ * Install file for New Stuff module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function language_dictionary_install() {
+  $t = get_t();
+
+  // Define the node type.
+  $language_dictionary = array(
+    'type' => 'language_dictionary',
+    'name' => $t('Dictionary entry'),
+    'base' => 'node_content',
+    'description' => $t('Dictionary word entry'),
+    'title_label' => $t('New word for Language Dictionary'),
+    'body_label' => $t('Content'),
+  );
+
+variable_set('comment_language_dictionary', COMMENT_NODE_CLOSED); 
+
+  // Set defaults.
+  $content_type = node_type_set_defaults($language_dictionary);
+  
+  // Add the body field (not part of default).
+ #node_add_body_field($content_type);
+
+  // Save the content type.
+  node_type_save($content_type);
+
+  // Set an instance for the body field.
+  $body_instance = field_info_instance('node', 'body', 'language_dictionary');
+
+
+  // Create fields.
+  foreach (_language_dictionary_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create instances of fields.
+  foreach (_language_dictionary_installed_instances() as $instance) {
+    $instance['entity_type'] = 'node';
+    $instance['bundle'] = $language_dictionary['type'];
+    field_create_instance($instance);
+  }
+}
+
+/**
+ * Return an array of fields, to be used during the install and uninstall process.
+ */
+function _language_dictionary_installed_fields() {
+  return array(
+    'definition' => array(
+      'field_name'  => 'definition',
+      'type'        => 'text',
+      'cardinality' => 1,
+    ),
+    'synonyms' => array(
+      'field_name' => 'synonyms',
+      'type'       => 'text',
+      'cardinality' => 1,
+    ),
+    'usage' => array(
+      'field_name' => 'usage',
+      'type'       => 'text',
+      'cardinality' => 1,
+    ),
+
+
+  );
+}
+
+/**
+ * Return an array of instances, to be used during the install and uninstall process.
+ */
+function _language_dictionary_installed_instances() {
+  $t = get_t();
+  return array(
+    'definition' => array(
+      'field_name'  => 'definition',
+      'label' => $t('Definition'),
+      'required'    => TRUE,
+      'type'        => 'text',
+      'widget'      => array(
+        'type'    => 'text_textarea',
+      ),
+    ),
+    'synonyms' => array(
+      'field_name'  => 'synonyms',
+      'label'       => $t('Synonyms'),
+      'required'    => TRUE,
+      'widget' => array(
+        'type'    => 'text_textfield',
+      ),
+    ),
+
+    'usage' => array(
+      'field_name'  => 'usage',
+      'label'       => $t('Usage'),
+      'required'    => TRUE,
+      'widget' => array(
+        'type'    => 'text_textarea',
+      ),
+    ),
+  );
+}
+
+
+function language_dictionary_node_view($node, $view_mode, $langcode) {
+  switch ($node->type) {
+    case 'language_dictionary':
+      $node->content['extra_link1'] = array(
+          '#weight' => 10,
+          '#theme' => 'link',
+          '#path' => 'ld/modify/nojs',
+          '#text' => t('Edit word'),
+          '#options' => array(
+              'attributes' => array(),
+              'html' => FALSE
+          ),
+      );
+
+$node->content['extra_link2'] = array(
+          '#weight' => 10,
+          '#theme' => 'link',
+          '#path' => 'ld/suggestion/nojs',
+          '#text' => t('Suggest word'),
+          '#options' => array(
+              'attributes' => array(),
+              'html' => FALSE
+          ),
+      );
+
+$node->content['extra_link3'] = array(
+          '#weight' => 10,
+          '#theme' => 'link',
+          '#path' => 'ld/addword/nojs',
+          '#text' => t('Add word'),
+          '#options' => array(
+              'attributes' => array(),
+              'html' => FALSE
+          ),
+      );
+      break;
+  }
+}
+
+
+/**
+ * Implements hook_uninstall().
+ *
+ */
+function language_dictionary_uninstall() {
+  // Delete all nodes of this type.
+  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+  $result = db_query($sql, array(':type' => 'language_dictionary'));
+  $nids = array();
+  foreach ($result as $row) {
+    $nids[] = $row->nid;
+  }
+  node_delete_multiple($nids);
+
+  // Delete fields.
+  foreach (array_keys(_language_dictionary_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+
+  // Delete field instances.
+  $instances = field_info_instances('node', 'language_dictionary');
+  foreach ($instances as $instance_name => $instance) {
+    field_delete_instance($instance);
+  }
+
+  // Delete the content type.
+  node_type_delete('language_dictionary');
+
+  // Purge all remaining field info.
+  field_purge_batch(1000);
+}
+
+/*
+ * Implements hook_schema
+ * schema for Language dictionary module
+ */
+
+function language_dictionary_schema() {
+
+// suggestion queue table 
+$schema['language_dictionary_suggestion'] = array(
+
+'description' => 'Language dictionary Suggestion queue.',
+'fields' => array(
+'word' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Title for word',
+),
+'definition' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Meaning of word',
+),
+'synonyms' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Synonyms of words',
+),
+'word_usage' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Usage of word', 
+),
+),
+);
+
+// modify queue table
+$schema['language_dictionary_modify'] = array(
+
+'description' => 'Language dictionary modify queue',
+
+'fields' => array(
+'word' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Title for word',
+),
+'definition' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Meaning of word',
+),
+'synonyms' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Synonyms of words',
+),
+'word_usage' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Usage of word', 
+),
+),
+);
+
+// add new word  queue table
+
+$schema['language_dictionary_add'] = array(
+
+'description' => 'Language dictionary add queue',
+
+'fields' => array(
+'word' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Title for word',
+),
+'definition' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Meaning of word',
+),
+
+'synonyms' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Synonyms of words',
+),
+
+'word_usage' => array(
+'type' => 'varchar',
+'length' => 255,
+'description' => 'Usage of word', 
+),
+),
+);
+
+return $schema;
+}

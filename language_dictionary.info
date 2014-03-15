@@ -1,0 +1,17 @@
+name = Language Dictionary
+description = Content type for Dictionary entries.
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = modal_forms
+dependencies[] = ctools_automodal
+dependencies[] = libraries
+dependencies[] = colorbox
+package = Saaranga
+core = 7.x
+php = 5.3
+
+
+stylesheets[all][] = css/modal.css
+css[modal.css][name] = Custom css style for modal form
+css[modal.css][description] = This file holds all the custom CSS of popup modal form.
+css[modal.css][options][weight] = 10
